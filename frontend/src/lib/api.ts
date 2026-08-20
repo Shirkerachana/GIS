@@ -1,8 +1,10 @@
 import axios from "axios";
 import type { GeoResponse, HealthResponse, LayerSummary, GeoJsonFeatureCollection } from "./types";
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://localhost:8000" : "");
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000",
+  baseURL: apiBaseUrl,
   timeout: 30000,
 });
 
