@@ -48,7 +48,14 @@ app.max_body_size = None
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
-    allow_origin_regex=r"https://[a-z0-9-]+\.onrender\.com",
+    allow_origin_regex=(
+        r"(?:https://[a-z0-9-]+\.onrender\.com"
+        r"|http://localhost(?::\d+)?"
+        r"|http://127\.0\.0\.1(?::\d+)?"
+        r"|http://10\.\d{1,3}\.\d{1,3}\.\d{1,3}(?::\d+)?"
+        r"|http://172\.(?:1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}(?::\d+)?"
+        r"|http://192\.168\.\d{1,3}\.\d{1,3}(?::\d+)?)$"
+    ),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
