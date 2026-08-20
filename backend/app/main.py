@@ -15,7 +15,7 @@ from starlette.routing import Router
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from agent.geoai_agent import GeoAIAgent
 from agent.enhanced_agent import EnhancedGeoAIAgent
@@ -59,8 +59,13 @@ enhanced_agent = EnhancedGeoAIAgent(service=service)
 langgraph_agent = LangGraphGeoAIAgent(service=service)
 
 
-@app.get("/")
-def root() -> dict[str, str]:
+frontend_dist = repo_root / "frontend" / "dist"
+
+
+@app.get("/", response_model=None)
+def root() -> FileResponse | dict[str, str]:
+    if frontend_dist.is_dir():
+        return FileResponse(frontend_dist / "index.html")
     return {"status": "ok", "service": settings.app_name}
 
 
@@ -383,6 +388,19 @@ def geo_query(request: ChatRequest) -> dict[str, Any]:
 @app.post("/api/chat", response_model=GeoAnalysisResult)
 def chat(request: ChatRequest) -> dict[str, Any]:
     return enhanced_agent.process_query(request.query, request.context)
+
+
+@app.get("/{path:path}", include_in_schema=False, response_model=None)
+def frontend_route(path: str) -> FileResponse:
+    if not frontend_dist.is_dir():
+        raise HTTPException(status_code=404, detail="Not Found")
+    if path.startswith("api/"):
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    requested_file = (frontend_dist / path).resolve()
+    if frontend_dist in requested_file.parents and requested_file.is_file():
+        return FileResponse(requested_file)
+    return FileResponse(frontend_dist / "index.html")
 
 
 @app.exception_handler(Exception)

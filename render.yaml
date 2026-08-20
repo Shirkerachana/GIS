@@ -1,14 +1,14 @@
 services:
   - type: web
-    name: gis-frontend
-    runtime: static
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    name: gis-full-stack
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
     envVars:
-      - key: VITE_API_BASE_URL
-        value: https://gis-3-0khh.onrender.com
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+      - key: DATA_MODE
+        value: demo
+      - key: USE_DEMO_DATA
+        value: "true"
+      - key: DATABASE_URL
+        sync: false
