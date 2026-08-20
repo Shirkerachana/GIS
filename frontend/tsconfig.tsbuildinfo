@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/candidatedetails.tsx","./src/components/geomap.tsx","./src/components/hospitalcandidates.tsx","./src/components/resultpanel.tsx","./src/components/sidebar.tsx","./src/lib/api.ts","./src/lib/geo.ts","./src/lib/types.ts"],"version":"5.9.3"}

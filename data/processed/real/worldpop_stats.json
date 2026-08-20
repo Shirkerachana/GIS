@@ -1,0 +1,30 @@
+{
+  "source_path": "D:\\Java\\self project\\ind_pop_2025_CN_1km_R2025A_UA_v1.tif",
+  "clip_path": "D:\\Java\\self project\\geoai-assistant\\data\\processed\\real\\worldpop_pune_clip.tif",
+  "crs": "EPSG:4326",
+  "bounds": [
+    73.735,
+    18.415,
+    73.995,
+    18.655
+  ],
+  "resolution": [
+    0.0083333333,
+    0.0083333333
+  ],
+  "nodata": -99999.0,
+  "band_count": 1,
+  "valid_cell_count": 896,
+  "total_population": 4599676.467,
+  "mean_population": 5133.567,
+  "min_population": 0.0,
+  "max_population": 14857.847,
+  "cell_area_sqkm": 0.855625,
+  "study_area": "Pune, Maharashtra, India",
+  "clip_bbox": [
+    73.735,
+    18.415,
+    73.995,
+    18.655
+  ]
+}

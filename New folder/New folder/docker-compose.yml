@@ -1,0 +1,28 @@
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: geoai_db
+      POSTGRES_USER: geoai
+      POSTGRES_PASSWORD: geoai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg2://geoai:geoai@postgis:5432/geoai_db
+      FRONTEND_ORIGIN: http://localhost:5173
+      USE_DEMO_DATA: "true"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgis
+
+volumes:
+  postgis_data:

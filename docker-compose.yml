@@ -1,0 +1,15 @@
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: geoai_db
+      POSTGRES_USER: geoai
+      POSTGRES_PASSWORD: geoai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+      - ./database/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+
+volumes:
+  postgis_data:
