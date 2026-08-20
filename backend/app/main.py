@@ -59,6 +59,16 @@ enhanced_agent = EnhancedGeoAIAgent(service=service)
 langgraph_agent = LangGraphGeoAIAgent(service=service)
 
 
+@app.get("/")
+def root() -> dict[str, str]:
+    return {"status": "ok", "service": settings.app_name}
+
+
+@app.get("/health")
+def health_check() -> dict[str, str]:
+    return {"status": "healthy"}
+
+
 @app.get("/api/health")
 def health() -> dict[str, Any]:
     return {
