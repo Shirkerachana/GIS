@@ -1,14 +1,19 @@
-FROM node:20-alpine
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
-COPY frontend/package.json frontend/tsconfig.json frontend/vite.config.ts frontend/tailwind.config.js frontend/postcss.config.js /app/frontend/
-COPY frontend/index.html /app/frontend/index.html
-COPY frontend/src /app/frontend/src
+COPY frontend/package.json frontend/package-lock.json ./frontend/
+RUN cd frontend && npm ci
 
-WORKDIR /app/frontend
-RUN npm install
+COPY frontend/ ./frontend/
+ARG VITE_API_BASE_URL=https://gis-2-erng.onrender.com
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+RUN cd frontend && npm run build
 
-EXPOSE 5173
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+FROM nginx:1.27-alpine
+
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/frontend/dist /usr/share/nginx/html
+
+EXPOSE 80
 

@@ -11,5 +11,14 @@ services:
       - postgis_data:/var/lib/postgresql/data
       - ./database/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
 
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: https://gis-2-erng.onrender.com
+    ports:
+      - "5173:80"
+
 volumes:
   postgis_data:
